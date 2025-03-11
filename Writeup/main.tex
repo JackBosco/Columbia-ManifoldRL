@@ -2,7 +2,10 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{geometry}
-\usepackage{mathptmx} 
+\usepackage{mathptmx}
+\usepackage[ieee]{biblatex}
+\bibliography{XAI RL}
+
 \usepackage[colorlinks=true, urlcolor=blue]{hyperref}
 \geometry{top=0.5in, bottom=0.5in, left=0.5in, right=0.5in}
 
@@ -27,8 +30,19 @@ For AI models to be safely deployed, especially in environments where human safe
 \\
 
 \noindent \textbf{Proposal}\\
-\\
+We aim to follow methods set out in \cite{gebauer_pitfall_2021} using variational autoencoders (VAE) to learn explicit latent space representations for high-dimensional input space.
+First we pretrain the autoencoder on a bunch of episodes from an actual human playing the game.
+The objective is to reconstruct the game frame-by-frame through a low-dimensional bottleneck. 
+After pretraining we append a new neural network to the bottleneck in the architecture which experiences reward from the environment and back-propagates the reward to the encoder.
+This will be the RL component.
+For explainability we can use VAE to generate interpretable representations from the state space \cite{white_sampling_2016}.
+More interestingly, we can generate novel images using the geometric average latent space coordinate of a certain feature. 
+This latent space arithmetic is known to reveal model biases and is a useful tool for interpreting how the RL agent responds to certain scenarios.
+\\\\
+\noindent \textbf{Dataset: \href{https://gymnasium.farama.org/environments/box2d/car_racing/}{CarRacing-v2 (OpenAI Gymnasium Box2D)}}\\
+The CarRacing-v2 dataset is a continuous high-dimensional control environment from OpenAI Gymnasium’s Box2D suite. It involves controlling a car on procedurally generated racetracks, requiring precise navigation and long-term strategy to optimize lap times. The state space consists of 96x96 RGB images, making it a computer vision-based RL problem. The agent controls acceleration, braking, and steering in a continuous action space. The reward is equal to 1000-the time it takes to complete a lap.
 
-\noindent \textbf{Dataset: \href{https://gymnasium.farama.org/environments/box2d/car_racing/}{CarRacing-v0 (OpenAI Gymnasium Box2D)}}\\
-The CarRacing-v0 dataset is a continuous high-dimensional control environment from OpenAI Gymnasium’s Box2D suite. It involves controlling a car on procedurally generated racetracks, requiring precise navigation and long-term strategy to optimize lap times. The state space consists of 96x96 RGB images, making it a computer vision-based RL problem. The agent controls acceleration, braking, and steering in a continuous action space.
+\printbibliography
+
 \end{document}
+
