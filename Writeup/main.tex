@@ -3,27 +3,32 @@
 \usepackage{amsmath}
 \usepackage{geometry}
 \usepackage{mathptmx} 
-
-\geometry{top=0.5in, bottom=1in, left=1in, right=1in}
+\usepackage[colorlinks=true, urlcolor=blue]{hyperref}
+\geometry{top=0.5in, bottom=0.5in, left=0.5in, right=0.5in}
 
 \begin{document}
 
-\title{Reinforcement Learning Project Proposal}
-\author{Joseph (Jack) Bosco \\ jab2516 \and Nikolaus Holzer \\ nh2677 \and Akshara Pramod \\ ap4613}
+\title{\textbf{Reinforcement Learning Project Proposal}}
+
+\author{Joseph (Jack) Bosco \\ jab2516  \and Akshara Pramod \\ ap4613}
 \date{Date : 11th March, 2025}
 
 \maketitle 
+
+\begin{center}
+    {\large \textbf{A Study on Explainability in RL Models}}
+\end{center}
+
 \noindent \textbf{Idea}\\
+This project aims to improve explainability in reinforcement learning by incorporating Variational Autoencoders (VAEs) to create meaningful latent representations of the CarRacing-v0 environment. Instead of directly training an RL agent on high-dimensional raw pixel inputs, we propose learning a compressed latent space using a VAE as it would capture essential driving features. The RL model will then learn policies in this reduced representation space, making training more efficient and interpretable. To further enhance explainability, we will apply t-SNE to visualize decision-making in the latent space. We also plan to leverage KL divergence in VAE loss to extract more meaningful and well-formed latent space.\\
 \\
-
 \noindent \textbf{Motivation} \\
-For AI models to be safely deployed, especially in environments where human safety or well-being is involved, stakeholders must be able to interpret and trust the decisions made by these models. In RL, particularly with deep learning models like DQN, understanding why an agent chooses a particular action can be challenging due to the complexity of the learned policies. As part of this project, we aim to solve this issue using a custom reward mechanism : KL divergence, using OpenAI Gym's MountainCar-v0 dataset. We wish to achieve a generalization that can be further expanded for more complex AI systems. 
+For AI models to be safely deployed, especially in environments where human safety or well-being is involved, stakeholders must be able to interpret and trust the decisions made by these models. Deep RL models trained on high-dimensional image data often act as black boxes, making it difficult to interpret why certain decisions are made. This lack of transparency limits trust in RL-based autonomous decision-making, particularly in safety-critical domains like self-driving cars.  
 \\
 
-\noindent \textbf{Strategy}\\
+\noindent \textbf{Proposal}\\
 \\
 
-\noindent \textbf{Data}\\
-\\
-
+\noindent \textbf{Dataset: \href{https://gymnasium.farama.org/environments/box2d/car_racing/}{CarRacing-v0 (OpenAI Gymnasium Box2D)}}\\
+The CarRacing-v0 dataset is a continuous high-dimensional control environment from OpenAI Gymnasium’s Box2D suite. It involves controlling a car on procedurally generated racetracks, requiring precise navigation and long-term strategy to optimize lap times. The state space consists of 96x96 RGB images, making it a computer vision-based RL problem. The agent controls acceleration, braking, and steering in a continuous action space.
 \end{document}
