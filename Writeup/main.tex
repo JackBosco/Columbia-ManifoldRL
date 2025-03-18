@@ -3,11 +3,27 @@
 \usepackage{amsmath}
 \usepackage{geometry}
 \usepackage{mathptmx}
-\usepackage[ieee]{biblatex}
+\usepackage{biblatex}
+\usepackage{times}       % assumes new font selection scheme installed
+\usepackage{amsmath}     % assumes amsmath package installed
+\usepackage{amssymb}     % assumes amsmath package installed
+\usepackage{graphicx}
+\usepackage[font=small]{caption} % set table caption below Table for longer descriptions
+\usepackage{tabularx}
+\usepackage{makecell}
+\usepackage{multirow}
+\usepackage{hhline}
+% \usepackage[ruled,noline,noend]{algorithm2e}
+% \usepackage[noend]{algpseudocode}
+
 \bibliography{XAI RL}
 
 \usepackage[colorlinks=true, urlcolor=blue]{hyperref}
 \geometry{top=0.5in, bottom=0.5in, left=0.5in, right=0.5in}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}% new Y, equal sized as X but centered
+\renewcommand\tabularxcolumn[1]{m{#1}}% for vertical centering text in X column
+\setlength\extrarowheight{1pt}
 
 \begin{document}
 
@@ -41,6 +57,29 @@ This latent space arithmetic is known to reveal model biases and is a useful too
 \\\\
 \noindent \textbf{Dataset: \href{https://gymnasium.farama.org/environments/box2d/car_racing/}{CarRacing-v2 (OpenAI Gymnasium Box2D)}}\\
 The CarRacing-v2 dataset is a continuous high-dimensional control environment from OpenAI Gymnasium’s Box2D suite. It involves controlling a car on procedurally generated racetracks, requiring precise navigation and long-term strategy to optimize lap times. The state space consists of 96x96 RGB images, making it a computer vision-based RL problem. The agent controls acceleration, braking, and steering in a continuous action space. The reward is equal to 1000-the time it takes to complete a lap.
+
+\begin{table}
+\centering
+{\footnotesize
+\begin{tabularx}{.95\linewidth}{|Y||Y|}
+\hline
+\textbf{Encoder} & \textbf{Decoder} \\ \hhline{|=||=|}
+\textbf{Input}: $96 \times 96 \times 3$ RGB image & \textbf{Input}: latent sample $\in \mathbb{R}^{k}$ \\ \hhline{|-||-|}
+Conv. $32 \times 3 \times 3$, stride 2, ReLU, BN & Dense, 256, ReLU \\ \hhline{|-||-|}
+Max pool. $2 \times 2$ & Dense, $3 \times 3 \times 128$, ReLU reshaped \\ \hhline{|-||-|}
+Conv. $32 \times 3 \times 3$, stride 2, ReLU, BN & Trans. Conv., $128 \times 3 \times 3$, stride 2, ReLU \\ \hhline{|-||-|}
+Conv. $64 \times 3 \times 3$, stride 1, ReLU, BN & Trans. Conv., $64 \times 3 \times 3$, stride 2, ReLU \\ \hhline{|-||-|}
+Avg. pool. $2 \times 2$ & Trans. Conv., $32 \times 3 \times 3$, stride 2, ReLU \\ \hhline{|-||-|}
+Conv. $128 \times 3 \times 3$, stride 2, ReLU, BN, flatten & Trans. Conv., $32 \times 3 \times 3$, stride 2, ReLU \\ \hhline{|-||-|}
+Dense, 256, ReLU & Trans. Conv., $16 \times 3 \times 3$, stride 2, ReLU \\ \hhline{|-||-|}
+Dense, $2\text{k}$ & Conv. $3 \times 3 \times 3$, stride 1 \\ \hhline{|-||-|}
+\textbf{Output}: Diag. Gaussian & \textbf{Output}: Ind. Bernoulli \\ \hline
+\end{tabularx}
+}
+\caption{Revised network architecture for a 96x96 RGB input.}
+\label{tab:arch_new}
+\end{table}
+
 
 \printbibliography
 
