@@ -478,3 +478,6 @@ TSWLatexianTemp*
 kroer_ai_games_markets_textbook.pdf
 project/data
 project/__pycache__/run_wolfram.cpython-310.pyc
+data
+model_weights
+pre_model_weights
