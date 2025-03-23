@@ -1,0 +1,3 @@
+[submodule "Modified_gym"]
+	path = Gymnasium
+	url = git@github.com:JackBosco/Gymnasium
