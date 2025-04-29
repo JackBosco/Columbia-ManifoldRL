@@ -58,6 +58,29 @@ This latent space arithmetic is known to reveal model biases and is a useful too
 \noindent \textbf{Dataset: \href{https://gymnasium.farama.org/environments/box2d/car_racing/}{CarRacing-v2 (OpenAI Gymnasium Box2D)}}\\
 The CarRacing-v2 dataset is a continuous high-dimensional control environment from OpenAI Gymnasium’s Box2D suite. It involves controlling a car on procedurally generated racetracks, requiring precise navigation and long-term strategy to optimize lap times. The state space consists of 96x96 RGB images, making it a computer vision-based RL problem. The agent controls acceleration, braking, and steering in a continuous action space. The reward is equal to 1000-the time it takes to complete a lap.
 
+\section{Methods}
+
+\subsection{Data Collection and Preprocessing}
+We collected over 2\,000 top-down RGB frames (96 $\times$ 96 $\times$ 3) from human-driven episodes of CarRacing-v2.  To increase data diversity, we crop off the static toolbar (pixels 0-83) and apply horizontal flips only above that line, effectively doubling samples for left- and right-turn frames \cite{ioffe_batch_2015, klimov_gymnasium_nodate}.  All images are saved as PNG and converted to floating-point tensors in [0,1].
+
+\subsection{Dataset Splitting}
+We treat the full set of augmented frames as a single map-style \texttt{Dataset} and split it randomly into 80\% train, 10\% validation, and 10\% test subsets using \texttt{torch.utils.data.random\_split} \cite{torch.utils.data}. This ensures non-overlapping, stratified usage for pretraining and held-out evaluation.
+
+\subsection{Variational Autoencoder Pretraining}
+Our pretraining objective is to learn a compact latent representation of frames by reconstructing inputs through a low-dimensional bottleneck (Fig.~\ref{tab:arch_new}).  We employ a Variational Autoencoder (VAE) whose encoder outputs mean and log-variance for a diagonal Gaussian in \(\mathbb{R}^k\) \cite{kingma_auto-encoding_2013}.  The reparameterization trick makes the stochastic sampling differentiable \cite{kingma_auto-encoding_2013}.  Each convolutional layer is followed by Batch Normalization and ReLU activations to stabilize and accelerate training \cite{ioffe_batch_2015}.
+
+The VAE loss is the negative Evidence Lower Bound (ELBO):
+\[
+\mathcal{L} = \underbrace{\mathbb{E}_{q(z\mid x)}\bigl[-\log p(x\mid z)\bigr]}_{\text{BCE reconstruction}} \;+\; \underbrace{D_{KL}\bigl(q(z\mid x)\,\|\,p(z)\bigr)}_{\text{KL divergence}}.
+\]
+We compute reconstruction via binary cross-entropy summed over pixels, and the KL term analytically for two Gaussians.
+
+\subsection{Implementation Details}
+We implement the VAE in PyTorch1.x, optimize with Adam (learning rate 1e-3, \(\beta_1=0.9,\beta_2=0.999\)), and train for 200 epochs with batch size 64.  Model weights are checkpointed every 20 epochs.  Early validation reconstructions are displayed periodically to monitor overfitting.
+
+\subsection{Rationale for Pretraining}
+By learning an unsupervised world model of the CarRacing frames, we extract features that capture essential track geometry and car orientation \cite{ha_world_2018}. These compact latent features greatly reduce the state dimensionality for the downstream RL agent, improving sample efficiency and interpretability \cite{white_sampling_2016}.
+
 \begin{table}
 \centering
 {\footnotesize
