@@ -1,0 +1,23 @@
+===== Test Results =====
+Average Reward: 499.03 ± 256.97
+Min/Max Reward: 5.66 / 1017.57
+Average Episode Length: 1000.00
+Average Tiles Visited: 124.10
+2025-05-06 10:39:14.485 Python[68637:19605262] +[IMKClient subclass]: chose IMKClient_Modern
+2025-05-06 10:39:14.485 Python[68637:19605262] +[IMKInputSession subclass]: chose IMKInputSession_Modern
+
+Do you want to render episodes? (y/n): y
+Rendering 3 episodes with model: ./logs/best_model.zip
+Testing model: ./logs/best_model.zip
+Model loaded successfully
+Episode 1: Reward = 1066.22, Steps = 1000, Tiles: 227
+Episode 2: Reward = 910.61, Steps = 1000, Tiles: 225
+Episode 3: Reward = 1015.46, Steps = 1000, Tiles: 222
+
+===== Test Results =====
+Average Reward: 997.43 ± 64.79
+Min/Max Reward: 910.61 / 1066.22
+Average Episode Length: 1000.00
+Average Tiles Visited: 224.67
+Testing complete!
+
