@@ -147,67 +147,6 @@ def train_sac_agent(vae_model: VAE, timesteps: int = 1_000_000):
     return model, venv
 
 
-def test_sac_agent(model: SAC, env, num_episodes: int = 10):
-    rewards = []
-    for ep in range(num_episodes):
-        obs, _ = env.reset()
-        done = False
-        total = 0.0
-        while not done:
-            action, _ = model.predict(obs, deterministic=True)
-            obs, reward, terminated, truncated, _ = env.step(action)
-            done = terminated or truncated
-            total += reward
-        rewards.append(total)
-        print(f"Test Episode {ep+1}: Reward = {total:.2f}")
-    print(f"Average Test Reward: {np.mean(rewards):.2f} ± {np.std(rewards):.2f}")
-    return rewards
-
-
-def plot_training_progress(log_path: str = './logs/'):
-    path = os.path.join(log_path, 'evaluations.npz')
-    if not os.path.exists(path):
-        return
-    data = np.load(path)
-    ts, results = data['timesteps'], data['results']
-    means, stds = results.mean(axis=1), results.std(axis=1)
-
-    plt.figure(figsize=(10, 6))
-    plt.plot(ts, means, label='Mean Reward')
-    plt.fill_between(ts, means - stds, means + stds, alpha=0.3)
-    plt.xlabel('Timesteps'); plt.ylabel('Reward')
-    plt.title('SAC Training Progress'); plt.grid(True)
-    plt.savefig('sac_training_progress.png')
-    plt.show()
-
-
-def visualize_policy(vae_model: VAE, sac_model: SAC, resolution: int = 50):
-    # Plot continuous action components over a grid in latent space
-    xx, yy = np.meshgrid(
-        np.linspace(-3, 3, resolution),
-        np.linspace(-3, 3, resolution)
-    )
-    grid = np.c_[xx.ravel(), yy.ravel()]
-    acts = []
-    for pt in grid:
-        # forward through policy to get mean action
-        mu, _ = sac_model.policy.actor(pt.astype(np.float32))
-        acts.append(mu.cpu().numpy())
-    acts = np.array(acts).reshape(xx.shape + (2,))
-
-    # Steering
-    plt.figure(figsize=(10, 8))
-    plt.contourf(xx, yy, acts[..., 0], levels=50, alpha=0.8)
-    plt.colorbar(label='Steering'); plt.xlabel('Latent Dim 1'); plt.ylabel('Latent Dim 2')
-    plt.title('SAC Steering Policy'); plt.savefig('sac_policy_steering.png'); plt.show()
-
-    # Acceleration
-    plt.figure(figsize=(10, 8))
-    plt.contourf(xx, yy, acts[..., 1], levels=50, alpha=0.8)
-    plt.colorbar(label='Acceleration'); plt.xlabel('Latent Dim 1'); plt.ylabel('Latent Dim 2')
-    plt.title('SAC Acceleration Policy'); plt.savefig('sac_policy_acceleration.png'); plt.show()
-
-
 def main():
     # Device selection
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -228,16 +167,16 @@ def main():
     sac_model, env = train_sac_agent(vae, timesteps=1_000_000)
     sac_model.save("sac_car_racing_vae")
 
-    # Test best model
-    best = './logs/best_model.zip'
-    if os.path.exists(best):
-        sac_model = SAC.load(best, env=env)
-        print("Loaded best SAC model.")
-    test_sac_agent(sac_model, env, num_episodes=10)
-
-    # Plot & visualize
-    plot_training_progress()
-    visualize_policy(vae, sac_model)
+    # Test best model - Done in a separate file
+    #best = './logs/best_model.zip'
+    #if os.path.exists(best):
+    #    sac_model = SAC.load(best, env=env)
+    #    print("Loaded best SAC model.")
+    #test_sac_agent(sac_model, env, num_episodes=10)
+#
+    ## Plot & visualize
+    #plot_training_progress()
+    #visualize_policy(vae, sac_model)
     print("Done.")
 
 
