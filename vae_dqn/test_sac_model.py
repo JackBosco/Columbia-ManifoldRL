@@ -86,7 +86,7 @@ class CarRacingLatentWrapper(gym.Wrapper):
 def create_env_sac(vae_model: VAE, render=False):
     # Create the environment with optional rendering
     mode = "human" if render else None
-    base = gym.make('CarRacing-v3', render_mode=mode)
+    base = gym.make('CarRacing-v2', render_mode=mode)
     base = RecordEpisodeStatistics(base)
     return CarRacingLatentWrapper(base, vae_model)
 

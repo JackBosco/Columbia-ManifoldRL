@@ -90,7 +90,7 @@ class CarRacingLatentWrapper(gym.Wrapper):
 
 def create_env_sac(vae_model: VAE):
     # Use RecordEpisodeStatistics to get info["episode"] at episode end
-    base = gym.make('CarRacing-v3', render_mode=None)
+    base = gym.make('CarRacing-v2', render_mode=None)
     base = RecordEpisodeStatistics(base)
     return CarRacingLatentWrapper(base, vae_model)
 
