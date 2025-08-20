@@ -1,0 +1,57 @@
+Using device: mps
+VAE loaded successfully
+Model loaded successfully from ./logs/best_model.zip
+Collecting data for visualization...
+Collected 500/5000 samples
+Collected 1000/5000 samples
+Collected 1500/5000 samples
+Collected 2000/5000 samples
+Collected 2500/5000 samples
+Collected 3000/5000 samples
+Collected 3500/5000 samples
+Collected 4000/5000 samples
+Collected 4500/5000 samples
+Collected 5000/5000 samples
+Visualizing with T-SNE...
+Computing T-SNE embedding...
+/Users/aksharapramod/Documents/Columbia Documents/Course Work/Sem2/RL/vae_dqn/myenv/lib/python3.13/site-packages/sklearn/manifold/_t_sne.py:1164: FutureWarning: 'n_iter' was renamed to 'max_iter' in version 1.5 and will be removed in 1.7.
+  warnings.warn(
+2025-05-06 11:03:41.396 Python[70069:19632128] +[IMKClient subclass]: chose IMKClient_Modern
+2025-05-06 11:03:41.396 Python[70069:19632128] +[IMKInputSession subclass]: chose IMKInputSession_Modern
+Performing cluster analysis...
+
+Cluster Analysis:
+Cluster 1 (934 states):
+  Average steering: -0.543
+  Average acceleration: 0.792
+  Average brake: 0.109
+
+Cluster 2 (1047 states):
+  Average steering: 0.533
+  Average acceleration: 0.548
+  Average brake: 0.231
+
+Cluster 3 (1373 states):
+  Average steering: -0.141
+  Average acceleration: 0.463
+  Average brake: 0.138
+
+Cluster 4 (868 states):
+  Average steering: -0.428
+  Average acceleration: 0.854
+  Average brake: 0.828
+
+Cluster 5 (778 states):
+  Average steering: -0.115
+  Average acceleration: 0.738
+  Average brake: 0.108
+
+Visualizing trajectories...
+Collecting trajectory for episode 1...
+Collecting trajectory for episode 2...
+Collecting trajectory for episode 3...
+Running T-SNE on combined data...
+/Users/aksharapramod/Documents/Columbia Documents/Course Work/Sem2/RL/vae_dqn/myenv/lib/python3.13/site-packages/sklearn/manifold/_t_sne.py:1164: FutureWarning: 'n_iter' was renamed to 'max_iter' in version 1.5 and will be removed in 1.7.
+  warnings.warn
+Generating latent grid visualization...
+Visualization complete!
